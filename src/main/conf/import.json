@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "type": "array",
+  "items": [
+    {
+      "key": "file",
+      "type": "string",
+      "title": "Data File",
+      "format": "file",
+      "description": "Data in CSV, TSV etc. format supported by readr."
+    },
+    {
+      "key": "id",
+      "title": "Identifier Column Name",
+      "type": "string",
+      "default": "id",
+      "description": "Name of the column containing the IDs"
+    },
+    {
+      "key": "locale",
+      "title": "Locale",
+      "type": "string",
+      "default": "en"
+    },
+    {
+      "key": "entity_type",
+      "title": "Entity Type",
+      "type": "string",
+      "default": "Participant",
+      "description": "Specify what these data relate to (Participant, Instrument, Area etc.)"
+    }
+  ],
+  "required": [
+    "file"
+  ]
+}
