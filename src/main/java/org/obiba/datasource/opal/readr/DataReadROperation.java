@@ -9,9 +9,18 @@ public class DataReadROperation extends AbstractROperation {
 
   private final String source;
 
-  public DataReadROperation(String symbol, String source) {
+  private final String delimiter;
+
+  private final String columnSpecification;
+
+  private final boolean columnSpecificationForSubset;
+
+  public DataReadROperation(String symbol, String source, String delimiter, String columnSpecification, boolean columnSpecificationForSubset) {
     this.symbol = symbol;
     this.source = source;
+    this.delimiter = delimiter;
+    this.columnSpecification = columnSpecification;
+    this.columnSpecificationForSubset = columnSpecificationForSubset;
   }
 
   @Override
@@ -25,7 +34,22 @@ public class DataReadROperation extends AbstractROperation {
   }
 
   private String getCommand() {
-    return String.format("base::assign('%s', read_csv('%s'))", symbol, source);
+    return String.format("base::assign('%s', %s)", symbol, Strings.isNullOrEmpty(delimiter) ? readWithTable() : readWithDelimiter());
+  }
+
+  private String readWithDelimiter() {
+    return String.format("read_delim('%s', delim = '%s'%s)", source, delimiter, columnTypes());
+  }
+
+  private String readWithTable() {
+    return String.format("read_table('%s'%s)", source, columnTypes());
+  }
+
+  private String columnTypes() {
+    if (Strings.isNullOrEmpty(columnSpecification)) {
+      return "";
+    }
+    return ", col_types = " + String.format(columnSpecificationForSubset ? "cols_only(%s)" : "cols(%s)", columnSpecification);
   }
 
   @Override
