@@ -10,17 +10,35 @@
       "description": "Data in CSV, TSV etc. format supported by readr."
     },
     {
-      "key": "id",
-      "title": "Identifier Column Name",
+      "key": "delim",
+      "title": "Delimiter Character",
       "type": "string",
-      "default": "id",
-      "description": "Name of the column containing the IDs"
+      "description": "Single character used to separate fields within a record. Leave blank to read whitespace-separated columns."
+    },
+    {
+      "key": "col_types",
+      "title": "Column Types",
+      "type": "string",
+      "format": "textarea",
+      "description": "A compact string representation where each character represents one column: c = character, i = integer, n = number, d = double, l = logical, D = date, T = date time, t = time, ? = guess, or _/- to skip the column."
+    },
+    {
+      "key": "is_col_types_subset",
+      "type": "boolean",
+      "title": "Subset of Columns"
     },
     {
       "key": "locale",
       "title": "Locale",
       "type": "string",
       "default": "en"
+    },
+    {
+      "key": "id",
+      "title": "Identifier Column Name",
+      "type": "string",
+      "default": "id",
+      "description": "Name of the column containing the IDs"
     },
     {
       "key": "entity_type",
@@ -31,6 +49,7 @@
     }
   ],
   "required": [
-    "file"
+    "file",
+    "spec_type"
   ]
 }
