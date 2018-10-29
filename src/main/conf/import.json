@@ -12,6 +12,8 @@
     {
       "key": "delim",
       "title": "Delimiter Character",
+      "default": ",",
+      "maximum": 1,
       "type": "string",
       "description": "Single character used to separate fields within a record. Leave blank to read whitespace-separated columns."
     },
@@ -20,13 +22,23 @@
       "title": "Column Types",
       "type": "string",
       "format": "textarea",
-      "default": ".default=\"?\"",
-      "description": "A compact string representation where each character represents one column: c = character, i = integer, n = number, d = double, l = logical, D = date, T = date time, t = time, ? = guess, or _/- to skip the column."
+      "description": "Comma separated list of \"column_name\"=\"type\" where type is one of: c = character, i = integer, n = number, d = double, l = logical, D = date, T = date time, t = time, ? = guess, or _/- to skip the column. If \"Subset of Columns\" is not checked all columns must be defined"
     },
     {
       "key": "is_col_types_subset",
       "type": "boolean",
       "title": "Subset of Columns"
+    },
+    {
+      "key": "na",
+      "type": "string",
+      "title": "Missing Values"
+    },
+    {
+      "key": "skip",
+      "type": "integer",
+      "default": 0,
+      "title": "Number of lines to skip before reading data"
     },
     {
       "key": "locale",

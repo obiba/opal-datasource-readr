@@ -15,12 +15,19 @@ public class DataReadROperation extends AbstractROperation {
 
   private final boolean columnSpecificationForSubset;
 
-  public DataReadROperation(String symbol, String source, String delimiter, String columnSpecification, boolean columnSpecificationForSubset) {
+  private final String missingValuesCharacters;
+
+  private final int skip;
+
+  public DataReadROperation(String symbol,
+  String source, String delimiter, String columnSpecification, boolean columnSpecificationForSubset, String missingValuesCharacters, int skip) {
     this.symbol = symbol;
     this.source = source;
     this.delimiter = delimiter;
     this.columnSpecification = columnSpecification;
     this.columnSpecificationForSubset = columnSpecificationForSubset;
+    this.missingValuesCharacters = missingValuesCharacters;
+    this.skip = skip;
   }
 
   @Override
@@ -38,18 +45,24 @@ public class DataReadROperation extends AbstractROperation {
   }
 
   private String readWithDelimiter() {
-    return String.format("read_delim('%s', delim = '%s'%s)", source, delimiter, columnTypes());
+    return String.format("read_delim('%s', delim = '%s'%s%s%s)", source, delimiter, columnTypes(), missingValues(), skipValue());
   }
 
   private String readWithTable() {
-    return String.format("read_table('%s'%s)", source, columnTypes());
+    return String.format("read_table('%s'%s%s%s)", source, columnTypes(), missingValues(), skipValue());
   }
 
   private String columnTypes() {
-    if (Strings.isNullOrEmpty(columnSpecification)) {
-      return "";
-    }
+    if (Strings.isNullOrEmpty(columnSpecification)) { return ""; }
     return ", col_types = " + String.format(columnSpecificationForSubset ? "cols_only(%s)" : "cols(%s)", columnSpecification);
+  }
+
+  private String missingValues() {
+    return Strings.isNullOrEmpty(missingValuesCharacters) ? "" : String.format(", na = c(%s)", missingValuesCharacters);
+  }
+
+  private String skipValue() {
+    return ", skip = " + skip;
   }
 
   @Override

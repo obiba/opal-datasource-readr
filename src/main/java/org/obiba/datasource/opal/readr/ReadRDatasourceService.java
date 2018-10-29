@@ -35,12 +35,16 @@ public class ReadRDatasourceService extends AbstractRDatasourceService {
         String delimiter = parameters.optString("delim");
         String columnTypes = parameters.optString("col_types");
         boolean columnSpecificationForSubset = parameters.optBoolean("is_col_types_subset");
+        String missingValuesCharacters = parameters.optString("na");
+        Integer skip = parameters.optInt("skip");
 
         String symbol = getSymbol(file);
         // copy file to the R session
         prepareFile(file);
-        execute(new DataReadROperation(symbol, file.getName(), delimiter, columnTypes, columnSpecificationForSubset));
-        return new RDatasource(getName(), getRSessionHandler(), symbol, parameters.optString("entity_type"), parameters.optString("id"));
+        execute(new DataReadROperation(symbol, file.getName(), delimiter, columnTypes, columnSpecificationForSubset,
+            missingValuesCharacters, skip == null ? 0 : skip));
+        return new RDatasource(getName(), getRSessionHandler(), symbol, parameters.optString("entity_type"),
+            parameters.optString("id"));
       }
     };
     factory.setRSessionHandler(getRSessionHandler());
