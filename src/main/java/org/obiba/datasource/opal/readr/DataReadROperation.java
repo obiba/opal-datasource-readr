@@ -11,23 +11,20 @@ public class DataReadROperation extends AbstractROperation {
 
   private final String delimiter;
 
-  private final String columnSpecification;
-
-  private final boolean columnSpecificationForSubset;
-
   private final String missingValuesCharacters;
 
   private final int numberOfRecordsToSkip;
 
+  private final String locale;
+
   public DataReadROperation(String symbol,
-  String source, String delimiter, String columnSpecification, boolean columnSpecificationForSubset, String missingValuesCharacters, int numberOfRecordsToSkip) {
+  String source, String delimiter, String missingValuesCharacters, int numberOfRecordsToSkip, String locale) {
     this.symbol = symbol;
     this.source = source;
     this.delimiter = delimiter;
-    this.columnSpecification = columnSpecification;
-    this.columnSpecificationForSubset = columnSpecificationForSubset;
     this.missingValuesCharacters = missingValuesCharacters;
     this.numberOfRecordsToSkip = numberOfRecordsToSkip;
+    this.locale = locale;
   }
 
   @Override
@@ -45,11 +42,11 @@ public class DataReadROperation extends AbstractROperation {
   }
 
   private String readWithDelimiter() {
-    return String.format("read_delim('%s', delim = '%s'%s%s)", source, delimiter, missingValues(), numberOfRecordsToSkipValue());
+    return String.format("read_delim('%s', delim = '%s'%s%s%s)", source, delimiter, missingValues(), numberOfRecordsToSkipValue(), localeValue());
   }
 
   private String readWithTable() {
-    return String.format("read_table('%s'%s%s)", source, missingValues(), numberOfRecordsToSkipValue());
+    return String.format("read_table('%s'%s%s%s)", source, missingValues(), numberOfRecordsToSkipValue(), localeValue());
   }
 
   private String missingValues() {
@@ -58,6 +55,10 @@ public class DataReadROperation extends AbstractROperation {
 
   private String numberOfRecordsToSkipValue() {
     return ", skip = " + numberOfRecordsToSkip;
+  }
+
+  private String localeValue() {
+    return String.format(", locale = \"\"", locale);
   }
 
   @Override
