@@ -42,20 +42,20 @@ public class DataReadROperation extends AbstractROperation {
   }
 
   private String getCommand() {
-    return String.format("base::assign('%s', %s)", symbol, Strings.isNullOrEmpty(delimiter) ? readWithTable() : readWithDelimiter());
+    return String.format("base::assign(\"%s\", %s)", symbol, Strings.isNullOrEmpty(delimiter) ? readWithTable() : readWithDelimiter());
   }
 
   private String readWithDelimiter() {
-    return String.format("read_delim('%s', delim = '%s'%s%s%s)", source, delimiter, missingValues(), numberOfRecordsToSkipValue(), localeValue());
+    return String.format("read_delim(\"%s\", delim = \"%s\"%s%s%s)", source, delimiter, missingValues(), numberOfRecordsToSkipValue(), localeValue());
   }
 
   private String readWithTable() {
-    return String.format("read_table('%s'%s%s%s)", source, missingValues(), numberOfRecordsToSkipValue(), localeValue());
+    return String.format("read_table(\"%s\"%s%s%s)", source, missingValues(), numberOfRecordsToSkipValue(), localeValue());
   }
 
   private String missingValues() {
     if (!Strings.isNullOrEmpty(missingValuesCharacters)) {
-      return String.format(", na = c(%s)", String.join(",", Stream.of(missingValuesCharacters.split(",")).map(s -> "\"" + s.replace("\"", "").replace("'", "") + "\"").collect(Collectors.toList())));
+      return String.format(", na = c(%s)", Stream.of(missingValuesCharacters.split(",")).map(s -> "\"" + removeQuotes(s) + "\"").collect(Collectors.joining(",")));
     }
 
     return ", na = c(\"\", \"NA\")";
@@ -66,7 +66,11 @@ public class DataReadROperation extends AbstractROperation {
   }
 
   private String localeValue() {
-    return String.format(", locale = locale(\"%s\")", locale.replace("\"", "").replace("'", ""));
+    return String.format(", locale = locale(\"%s\")", removeQuotes(locale));
+  }
+
+  private String removeQuotes(String stringValue) {
+    return stringValue.replace("\"", "").replace("'", "");
   }
 
   @Override
