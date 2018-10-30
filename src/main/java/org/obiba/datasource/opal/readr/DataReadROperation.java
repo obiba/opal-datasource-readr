@@ -17,17 +17,17 @@ public class DataReadROperation extends AbstractROperation {
 
   private final String missingValuesCharacters;
 
-  private final int skip;
+  private final int numberOfRecordsToSkip;
 
   public DataReadROperation(String symbol,
-  String source, String delimiter, String columnSpecification, boolean columnSpecificationForSubset, String missingValuesCharacters, int skip) {
+  String source, String delimiter, String columnSpecification, boolean columnSpecificationForSubset, String missingValuesCharacters, int numberOfRecordsToSkip) {
     this.symbol = symbol;
     this.source = source;
     this.delimiter = delimiter;
     this.columnSpecification = columnSpecification;
     this.columnSpecificationForSubset = columnSpecificationForSubset;
     this.missingValuesCharacters = missingValuesCharacters;
-    this.skip = skip;
+    this.numberOfRecordsToSkip = numberOfRecordsToSkip;
   }
 
   @Override
@@ -45,11 +45,11 @@ public class DataReadROperation extends AbstractROperation {
   }
 
   private String readWithDelimiter() {
-    return String.format("read_delim('%s', delim = '%s'%s%s%s)", source, delimiter, columnTypes(), missingValues(), skipValue());
+    return String.format("read_delim('%s', delim = '%s'%s%s%s)", source, delimiter, columnTypes(), missingValues(), numberOfRecordsToSkipValue());
   }
 
   private String readWithTable() {
-    return String.format("read_table('%s'%s%s%s)", source, columnTypes(), missingValues(), skipValue());
+    return String.format("read_table('%s'%s%s%s)", source, columnTypes(), missingValues(), numberOfRecordsToSkipValue());
   }
 
   private String columnTypes() {
@@ -58,11 +58,11 @@ public class DataReadROperation extends AbstractROperation {
   }
 
   private String missingValues() {
-    return Strings.isNullOrEmpty(missingValuesCharacters) ? "" : String.format(", na = c(%s)", missingValuesCharacters);
+    return Strings.isNullOrEmpty(missingValuesCharacters) ? ", na = c(\"\", \"NA\")" : String.format(", na = c(%s)", missingValuesCharacters);
   }
 
-  private String skipValue() {
-    return ", skip = " + skip;
+  private String numberOfRecordsToSkipValue() {
+    return ", skip = " + numberOfRecordsToSkip;
   }
 
   @Override
