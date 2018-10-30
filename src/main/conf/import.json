@@ -20,13 +20,15 @@
     {
       "key": "na",
       "type": "string",
-      "title": "Missing Values"
+      "title": "Missing Values",
+      "description": "A comma separated list of values to be considered as missing."
     },
     {
       "key": "skip",
       "type": "integer",
       "default": 0,
-      "title": "Number of lines to skip before reading data"
+      "title": "Skip",
+      "description": "Number of lines to skip before reading data."
     },
     {
       "key": "locale",
