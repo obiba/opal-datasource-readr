@@ -18,18 +18,6 @@
       "description": "Single character used to separate fields within a record. Leave blank to read whitespace-separated columns."
     },
     {
-      "key": "col_types",
-      "title": "Column Types",
-      "type": "string",
-      "format": "textarea",
-      "description": "Comma separated list of \"column_name\"=\"type\" where type is one of: c = character, i = integer, n = number, d = double, l = logical, D = date, T = date time, t = time, ? = guess, or _/- to skip the column. If \"Subset of Columns\" is not checked all columns must be defined"
-    },
-    {
-      "key": "is_col_types_subset",
-      "type": "boolean",
-      "title": "Subset of Columns"
-    },
-    {
       "key": "na",
       "type": "string",
       "title": "Missing Values"

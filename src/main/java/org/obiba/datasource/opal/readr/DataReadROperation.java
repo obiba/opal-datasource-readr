@@ -45,16 +45,11 @@ public class DataReadROperation extends AbstractROperation {
   }
 
   private String readWithDelimiter() {
-    return String.format("read_delim('%s', delim = '%s'%s%s%s)", source, delimiter, columnTypes(), missingValues(), numberOfRecordsToSkipValue());
+    return String.format("read_delim('%s', delim = '%s'%s%s)", source, delimiter, missingValues(), numberOfRecordsToSkipValue());
   }
 
   private String readWithTable() {
-    return String.format("read_table('%s'%s%s%s)", source, columnTypes(), missingValues(), numberOfRecordsToSkipValue());
-  }
-
-  private String columnTypes() {
-    if (Strings.isNullOrEmpty(columnSpecification)) { return ""; }
-    return ", col_types = " + String.format(columnSpecificationForSubset ? "cols_only(%s)" : "cols(%s)", columnSpecification);
+    return String.format("read_table('%s'%s%s)", source, missingValues(), numberOfRecordsToSkipValue());
   }
 
   private String missingValues() {
