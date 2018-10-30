@@ -21,7 +21,7 @@
       "key": "na",
       "type": "string",
       "title": "Missing Values",
-      "description": "A comma separated list of quoted strings to be considered as missing."
+      "description": "A comma separated list of double-quoted strings to be considered as missing. Example: \"NONE\",\"INFINITY\",\"999\""
     },
     {
       "key": "skip",

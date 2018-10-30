@@ -1,10 +1,10 @@
 package org.obiba.datasource.opal.readr;
 
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.google.common.base.Strings;
+
 import org.obiba.opal.spi.r.AbstractROperation;
 
 public class DataReadROperation extends AbstractROperation {
