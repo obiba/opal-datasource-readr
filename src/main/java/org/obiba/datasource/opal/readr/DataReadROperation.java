@@ -1,5 +1,9 @@
 package org.obiba.datasource.opal.readr;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import com.google.common.base.Strings;
 import org.obiba.opal.spi.r.AbstractROperation;
 
@@ -50,7 +54,11 @@ public class DataReadROperation extends AbstractROperation {
   }
 
   private String missingValues() {
-    return Strings.isNullOrEmpty(missingValuesCharacters) ? ", na = c(\"\", \"NA\")" : String.format(", na = c(%s)", missingValuesCharacters);
+    if (!Strings.isNullOrEmpty(missingValuesCharacters)) {
+      return String.format(", na = c(%s)", String.join(",", Stream.of(missingValuesCharacters.split(",")).map(s -> "\"" + s.replace("\"", "").replace("'", "") + "\"").collect(Collectors.toList())));
+    }
+
+    return ", na = c(\"\", \"NA\")";
   }
 
   private String numberOfRecordsToSkipValue() {
@@ -58,7 +66,7 @@ public class DataReadROperation extends AbstractROperation {
   }
 
   private String localeValue() {
-    return String.format(", locale = locale(\"%s\")", locale);
+    return String.format(", locale = locale(\"%s\")", locale.replace("\"", "").replace("'", ""));
   }
 
   @Override

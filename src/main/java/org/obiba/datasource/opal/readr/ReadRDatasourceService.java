@@ -35,8 +35,8 @@ public class ReadRDatasourceService extends AbstractRDatasourceService {
         File file = resolvePath(parameters.optString("file"));
 
         String delimiter = parameters.optString("delim");
-        String missingValuesCharacters = parameters.optString("na");
-        String locale = parameters.optString("locale");
+        String missingValuesCharacters = parameters.optString("na", "\"\", \"NA\"");
+        String locale = parameters.optString("locale", "en");
         int skip = parameters.optInt("skip");
 
         String symbol = getSymbol(file);
