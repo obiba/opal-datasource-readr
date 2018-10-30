@@ -4,6 +4,8 @@ import java.io.File;
 
 import javax.validation.constraints.NotNull;
 
+import com.google.common.base.Strings;
+
 import org.json.JSONObject;
 import org.obiba.magma.Datasource;
 import org.obiba.magma.DatasourceFactory;
@@ -33,14 +35,16 @@ public class ReadRDatasourceService extends AbstractRDatasourceService {
         File file = resolvePath(parameters.optString("file"));
 
         String delimiter = parameters.optString("delim");
-        String columnTypes = parameters.optString("col_types");
-        boolean columnSpecificationForSubset = parameters.optBoolean("is_col_types_subset");
+        String missingValuesCharacters = parameters.optString("na");
+        String locale = parameters.optString("locale");
+        int skip = parameters.optInt("skip");
 
         String symbol = getSymbol(file);
         // copy file to the R session
         prepareFile(file);
-        execute(new DataReadROperation(symbol, file.getName(), delimiter, columnTypes, columnSpecificationForSubset));
-        return new RDatasource(getName(), getRSessionHandler(), symbol, parameters.optString("entity_type"), parameters.optString("id"));
+        execute(new DataReadROperation(symbol, file.getName(), delimiter, missingValuesCharacters, skip, Strings.isNullOrEmpty(locale) ? "en" : locale));
+        return new RDatasource(getName(), getRSessionHandler(), symbol, parameters.optString("entity_type"),
+            parameters.optString("id"));
       }
     };
     factory.setRSessionHandler(getRSessionHandler());

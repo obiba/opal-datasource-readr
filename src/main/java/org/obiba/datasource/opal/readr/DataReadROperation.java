@@ -11,16 +11,20 @@ public class DataReadROperation extends AbstractROperation {
 
   private final String delimiter;
 
-  private final String columnSpecification;
+  private final String missingValuesCharacters;
 
-  private final boolean columnSpecificationForSubset;
+  private final int numberOfRecordsToSkip;
 
-  public DataReadROperation(String symbol, String source, String delimiter, String columnSpecification, boolean columnSpecificationForSubset) {
+  private final String locale;
+
+  public DataReadROperation(String symbol,
+  String source, String delimiter, String missingValuesCharacters, int numberOfRecordsToSkip, String locale) {
     this.symbol = symbol;
     this.source = source;
     this.delimiter = delimiter;
-    this.columnSpecification = columnSpecification;
-    this.columnSpecificationForSubset = columnSpecificationForSubset;
+    this.missingValuesCharacters = missingValuesCharacters;
+    this.numberOfRecordsToSkip = numberOfRecordsToSkip;
+    this.locale = locale;
   }
 
   @Override
@@ -38,18 +42,23 @@ public class DataReadROperation extends AbstractROperation {
   }
 
   private String readWithDelimiter() {
-    return String.format("read_delim('%s', delim = '%s'%s)", source, delimiter, columnTypes());
+    return String.format("read_delim('%s', delim = '%s'%s%s%s)", source, delimiter, missingValues(), numberOfRecordsToSkipValue(), localeValue());
   }
 
   private String readWithTable() {
-    return String.format("read_table('%s'%s)", source, columnTypes());
+    return String.format("read_table('%s'%s%s%s)", source, missingValues(), numberOfRecordsToSkipValue(), localeValue());
   }
 
-  private String columnTypes() {
-    if (Strings.isNullOrEmpty(columnSpecification)) {
-      return "";
-    }
-    return ", col_types = " + String.format(columnSpecificationForSubset ? "cols_only(%s)" : "cols(%s)", columnSpecification);
+  private String missingValues() {
+    return Strings.isNullOrEmpty(missingValuesCharacters) ? ", na = c(\"\", \"NA\")" : String.format(", na = c(%s)", missingValuesCharacters);
+  }
+
+  private String numberOfRecordsToSkipValue() {
+    return ", skip = " + numberOfRecordsToSkip;
+  }
+
+  private String localeValue() {
+    return String.format(", locale = locale(\"%s\")", locale);
   }
 
   @Override
