@@ -70,7 +70,7 @@ public class DataReadROperation extends AbstractROperation {
   }
 
   private String removeQuotes(String stringValue) {
-    return stringValue.replace("\"", "").replace("'", "");
+    return stringValue.replace("\"", "").replace("'", "").trim();
   }
 
   @Override
