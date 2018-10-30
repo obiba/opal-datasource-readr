@@ -58,7 +58,7 @@ public class DataReadROperation extends AbstractROperation {
   }
 
   private String localeValue() {
-    return String.format(", locale = \"\"", locale);
+    return String.format(", locale = locale(\"%s\")", locale);
   }
 
   @Override
