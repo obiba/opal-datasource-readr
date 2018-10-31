@@ -18,6 +18,14 @@
       "description": "Single character used to separate fields within a record. Leave blank to read whitespace-separated columns."
     },
     {
+      "key": "quote",
+      "type": "string",
+      "maxLength": 1,
+      "default": "\"",
+      "title": "Quote",
+      "description": "Single character used to quote strings."
+    },
+    {
       "key": "na",
       "type": "string",
       "title": "Missing Values",

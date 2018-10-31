@@ -6,8 +6,12 @@ import java.util.stream.Stream;
 import com.google.common.base.Strings;
 
 import org.obiba.opal.spi.r.AbstractROperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DataReadROperation extends AbstractROperation {
+
+  private static final Logger log = LoggerFactory.getLogger(DataReadROperation.class);
 
   private final String symbol;
 
@@ -21,14 +25,17 @@ public class DataReadROperation extends AbstractROperation {
 
   private final String locale;
 
+  private final String quoteCharacter;
+
   public DataReadROperation(String symbol,
-  String source, String delimiter, String missingValuesCharacters, int numberOfRecordsToSkip, String locale) {
+  String source, String delimiter, String missingValuesCharacters, int numberOfRecordsToSkip, String locale, String quoteCharacter) {
     this.symbol = symbol;
     this.source = source;
     this.delimiter = delimiter;
     this.missingValuesCharacters = missingValuesCharacters;
     this.numberOfRecordsToSkip = numberOfRecordsToSkip;
     this.locale = locale;
+    this.quoteCharacter = quoteCharacter;
   }
 
   @Override
@@ -38,6 +45,8 @@ public class DataReadROperation extends AbstractROperation {
     eval("library(readr)", false);
     ensurePackage("tibble");
     eval("library(tibble)", false);
+
+    log.debug("Eval command: {}", getCommand());
     eval(getCommand(), false);
   }
 
@@ -46,11 +55,20 @@ public class DataReadROperation extends AbstractROperation {
   }
 
   private String readWithDelimiter() {
-    return String.format("read_delim(\"%s\", delim = \"%s\"%s%s%s)", source, delimiter, missingValues(), numberOfRecordsToSkipValue(), localeValue());
+    return String.format("read_delim(\"%s\", delim = \"%s\"%s%s%s%s)", source, delimiter.replace("\"", "\\\""), quote(), missingValues(), numberOfRecordsToSkipValue(), localeValue());
   }
 
   private String readWithTable() {
     return String.format("read_table2(\"%s\"%s%s%s)", source, missingValues(), numberOfRecordsToSkipValue(), localeValue());
+  }
+
+  private String quote() {
+    switch (quoteCharacter) {
+      case "\"":
+        return ", quote = '\"'";
+      default:
+       return String.format("quote = \"%s\"", quoteCharacter);
+    }
   }
 
   private String missingValues() {
