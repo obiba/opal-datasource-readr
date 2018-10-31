@@ -55,7 +55,7 @@ public class DataReadROperation extends AbstractROperation {
 
   private String missingValues() {
     if (!Strings.isNullOrEmpty(missingValuesCharacters)) {
-      return String.format(", na = c(%s)", Stream.of(missingValuesCharacters.split(",")).map(s -> "\"" + removeQuotes(s) + "\"").collect(Collectors.joining(",")));
+      return String.format(", na = c(%s)", Stream.of(missingValuesCharacters.split(",")).map(s -> "\"" + s.replace("\"", "").replace("'", "\\'") + "\"").collect(Collectors.joining(",")));
     }
 
     return ", na = c(\"\", \"NA\")";
