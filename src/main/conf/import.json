@@ -13,7 +13,7 @@
       "key": "delim",
       "title": "Delimiter Character",
       "default": ",",
-      "maximum": 1,
+      "maxLength": 2,
       "type": "string",
       "description": "Single character used to separate fields within a record. Leave blank to read whitespace-separated columns."
     },
@@ -21,11 +21,12 @@
       "key": "na",
       "type": "string",
       "title": "Missing Values",
-      "description": "A comma separated list of quoted strings to be considered as missing."
+      "description": "A comma separated list of double-quoted strings to be considered as missing. Example: \"NONE\",\"INFINITY\",\"999\""
     },
     {
       "key": "skip",
       "type": "integer",
+      "minimum": 0,
       "default": 0,
       "title": "Skip",
       "description": "Number of lines to skip before reading data."
