@@ -37,12 +37,13 @@ public class ReadRDatasourceService extends AbstractRDatasourceService {
         String delimiter = parameters.optString("delim");
         String missingValuesCharacters = parameters.optString("na", "\"\", \"NA\"");
         String locale = parameters.optString("locale", "en");
+        String quoteCharacter = parameters.optString("quote", "\"");
         int skip = parameters.optInt("skip");
 
         String symbol = getSymbol(file);
         // copy file to the R session
         prepareFile(file);
-        execute(new DataReadROperation(symbol, file.getName(), delimiter, missingValuesCharacters, skip, Strings.isNullOrEmpty(locale) ? "en" : locale));
+        execute(new DataReadROperation(symbol, file.getName(), delimiter, missingValuesCharacters, skip, locale, quoteCharacter));
         return new RDatasource(getName(), getRSessionHandler(), symbol, parameters.optString("entity_type"),
             parameters.optString("id"));
       }
