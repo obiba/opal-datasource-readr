@@ -15,13 +15,13 @@
       "default": ",",
       "maxLength": 2,
       "type": "string",
-      "description": "Single character used to separate fields within a record. Leave blank to read whitespace-separated columns."
+      "description": "Single character used to separate fields within a record. Default is a comma."
     },
     {
       "key": "na",
       "type": "string",
       "title": "Missing Values",
-      "description": "A comma separated list of double-quoted strings to be considered as missing. Example: \"NONE\",\"INFINITY\",\"999\""
+      "description": "The string that will represent missing values. Default is NA."
     }
   ],
   "required": [
