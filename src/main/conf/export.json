@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "type": "array",
+  "items": [
+    {
+      "key": "file",
+      "type": "string",
+      "title": "Data File",
+      "format": "file",
+      "description": "Data in CSV, TSV etc. format supported by readr."
+    },
+    {
+      "key": "delim",
+      "title": "Delimiter Character",
+      "default": ",",
+      "maxLength": 2,
+      "type": "string",
+      "description": "Single character used to separate fields within a record. Default is a comma."
+    },
+    {
+      "key": "na",
+      "type": "string",
+      "title": "Missing Values",
+      "description": "The string that will represent missing values. Default is NA."
+    }
+  ],
+  "required": [
+    "file"
+  ]
+}

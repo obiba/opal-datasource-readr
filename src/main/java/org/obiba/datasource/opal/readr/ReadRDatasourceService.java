@@ -9,11 +9,17 @@ import com.google.common.base.Strings;
 import org.json.JSONObject;
 import org.obiba.magma.Datasource;
 import org.obiba.magma.DatasourceFactory;
+import org.obiba.magma.ValueTable;
+import org.obiba.magma.ValueTableWriter;
+import org.obiba.magma.support.StaticDatasource;
 import org.obiba.opal.spi.datasource.DatasourceUsage;
+import org.obiba.opal.spi.r.FileReadROperation;
+import org.obiba.opal.spi.r.RUtils;
 import org.obiba.opal.spi.r.datasource.AbstractRDatasourceFactory;
 import org.obiba.opal.spi.r.datasource.AbstractRDatasourceService;
 import org.obiba.opal.spi.r.datasource.RDatasourceFactory;
 import org.obiba.opal.spi.r.datasource.magma.RDatasource;
+import org.obiba.opal.spi.r.datasource.magma.RSymbolWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +34,16 @@ public class ReadRDatasourceService extends AbstractRDatasourceService {
 
   @Override
   public DatasourceFactory createDatasourceFactory(DatasourceUsage usage, JSONObject parameters) {
+    switch (usage) {
+      case IMPORT:
+        return createImportDatasourceFactory(parameters);
+      case EXPORT:
+        return createExportDatasourceFactory(parameters);
+    }
+    throw new NoSuchMethodError("Datasource usage not available: " + usage);
+  }
+
+  private DatasourceFactory createImportDatasourceFactory(JSONObject parameters) {
     RDatasourceFactory factory = new AbstractRDatasourceFactory() {
       @NotNull
       @Override
@@ -40,7 +56,7 @@ public class ReadRDatasourceService extends AbstractRDatasourceService {
         String quoteCharacter = parameters.optString("quote", "\"");
         int skip = parameters.optInt("skip");
 
-        String symbol = getSymbol(file);
+        String symbol = RUtils.getSymbol(file);
         // copy file to the R session
         prepareFile(file);
         execute(new DataReadROperation(symbol, file.getName(), delimiter, missingValuesCharacters, skip, locale, quoteCharacter));
@@ -52,4 +68,44 @@ public class ReadRDatasourceService extends AbstractRDatasourceService {
     return factory;
   }
 
+  private DatasourceFactory createExportDatasourceFactory(JSONObject parameters) {
+    RDatasourceFactory factory = new AbstractRDatasourceFactory() {
+      @NotNull
+      @Override
+      protected Datasource internalCreate() {
+        return new StaticDatasource(getOutputFile().getName());
+      }
+
+      @Override
+      public RSymbolWriter createSymbolWriter() {
+        return new RSymbolWriter() {
+          @Override
+          public String getSymbol(ValueTable table) {
+            return RUtils.getSymbol(table.getName());
+          }
+
+          @Override
+          public void write(ValueTable table) {
+            File file = getOutputFile();
+
+            String delimiter = parameters.optString("delim");
+            String missingValuesCharacters = parameters.optString("na", "\"\", \"NA\"");
+
+            String symbol = getSymbol(table);
+            execute(new DataWriteROperation(symbol, file.getName(), delimiter, missingValuesCharacters));
+            // copy file from R session
+            execute(new FileReadROperation(file.getName(), file));
+          }
+
+        };
+      }
+
+      private File getOutputFile() {
+        return resolvePath(parameters.optString("file"));
+      }
+      
+    };
+    factory.setRSessionHandler(getRSessionHandler());
+    return factory;
+  }
 }
