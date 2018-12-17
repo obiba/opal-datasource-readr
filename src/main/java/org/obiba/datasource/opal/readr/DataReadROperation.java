@@ -51,7 +51,8 @@ public class DataReadROperation extends AbstractROperation {
   }
 
   private String getCommand() {
-    return String.format("base::assign(\"%s\", %s)", symbol, Strings.isNullOrEmpty(delimiter) ? readWithTable() : readWithDelimiter());
+    // is.null call is a trick for not getting the assigned value when evaluating the command
+    return String.format("is.null(base::assign(\"%s\", %s))", symbol, Strings.isNullOrEmpty(delimiter) ? readWithTable() : readWithDelimiter());
   }
 
   private String readWithDelimiter() {
