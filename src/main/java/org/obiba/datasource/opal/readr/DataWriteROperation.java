@@ -46,7 +46,9 @@ public class DataWriteROperation extends AbstractROperation {
 
   private String missingValues() {
     if (!Strings.isNullOrEmpty(missingValuesCharacters)) {
-      return String.format(", na = \"%s\"", Stream.of(missingValuesCharacters.split(",")).findFirst().get());
+      return String.format(", na = \"%s\"",
+        Stream.of(missingValuesCharacters.split(",")).findFirst().get().replace("\"", "")
+      );
     }
 
     return ", na = \"NA\"";
