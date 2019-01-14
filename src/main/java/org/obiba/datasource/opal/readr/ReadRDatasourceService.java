@@ -1,6 +1,7 @@
 package org.obiba.datasource.opal.readr;
 
 import java.io.File;
+import java.nio.file.Paths;
 
 import javax.validation.constraints.NotNull;
 
@@ -92,9 +93,11 @@ public class ReadRDatasourceService extends AbstractRDatasourceService {
             String missingValuesCharacters = parameters.optString("na", "\"\", \"NA\"");
 
             String symbol = getSymbol(table);
+            String resultFile = symbol + ".csv";
+
             execute(new DataWriteROperation(symbol, file.getName(), delimiter, missingValuesCharacters));
             // copy file from R session
-            execute(new FileReadROperation(file.getName(), file));
+            execute(new FileReadROperation(file.getName(), Paths.get(file.getAbsolutePath(), resultFile).toFile()));
           }
 
         };
@@ -103,7 +106,7 @@ public class ReadRDatasourceService extends AbstractRDatasourceService {
       private File getOutputFile() {
         return resolvePath(parameters.optString("file"));
       }
-      
+
     };
     factory.setRSessionHandler(getRSessionHandler());
     return factory;
