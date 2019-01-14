@@ -1,12 +1,12 @@
 package org.obiba.datasource.opal.readr;
 
+import java.util.stream.Stream;
+
 import com.google.common.base.Strings;
+
 import org.obiba.opal.spi.r.AbstractROperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class DataWriteROperation extends AbstractROperation {
 
