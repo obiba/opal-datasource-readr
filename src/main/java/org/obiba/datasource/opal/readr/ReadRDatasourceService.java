@@ -7,6 +7,8 @@ import javax.validation.constraints.NotNull;
 
 import com.google.common.base.Strings;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 import org.json.JSONObject;
 import org.obiba.magma.Datasource;
 import org.obiba.magma.DatasourceFactory;
@@ -74,7 +76,7 @@ public class ReadRDatasourceService extends AbstractRDatasourceService {
       @NotNull
       @Override
       protected Datasource internalCreate() {
-        return new StaticDatasource(getOutputFile().getName());
+        return new StaticDatasource(getOutputFile().getName() + "_" + DateTimeFormat.forPattern("yyyyMMddHHmmss").print(DateTime.now()));
       }
 
       @Override
@@ -97,7 +99,7 @@ public class ReadRDatasourceService extends AbstractRDatasourceService {
 
             execute(new DataWriteROperation(symbol, file.getName(), delimiter, missingValuesCharacters));
             // copy file from R session
-            execute(new FileReadROperation(file.getName(), Paths.get(file.getAbsolutePath(), resultFile).toFile()));
+            execute(new FileReadROperation(file.getName(), Paths.get(file.getAbsolutePath(), table.getDatasource().getName(), resultFile).toFile()));
           }
 
         };
