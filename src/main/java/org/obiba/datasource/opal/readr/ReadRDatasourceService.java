@@ -102,6 +102,10 @@ public class ReadRDatasourceService extends AbstractRDatasourceService {
             execute(new FileReadROperation(resultFile, Paths.get(file.getAbsolutePath(), resultFile).toFile()));
           }
 
+          @Override
+          public void dispose() {
+            // no-op
+          }
         };
       }
 
