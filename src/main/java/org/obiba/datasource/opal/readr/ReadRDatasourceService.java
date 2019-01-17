@@ -76,7 +76,7 @@ public class ReadRDatasourceService extends AbstractRDatasourceService {
       @NotNull
       @Override
       protected Datasource internalCreate() {
-        return new StaticDatasource(getOutputFile().getName() + "_" + DateTimeFormat.forPattern("yyyyMMddHHmmss").print(DateTime.now()));
+        return new StaticDatasource(getOutputFile().getName());
       }
 
       @Override
@@ -97,9 +97,9 @@ public class ReadRDatasourceService extends AbstractRDatasourceService {
             String symbol = getSymbol(table);
             String resultFile = symbol + ".csv";
 
-            execute(new DataWriteROperation(symbol, file.getName(), delimiter, missingValuesCharacters));
+            execute(new DataWriteROperation(symbol, resultFile, delimiter, missingValuesCharacters));
             // copy file from R session
-            execute(new FileReadROperation(file.getName(), Paths.get(file.getAbsolutePath(), table.getDatasource().getName(), resultFile).toFile()));
+            execute(new FileReadROperation(resultFile, Paths.get(file.getAbsolutePath(), resultFile).toFile()));
           }
 
         };
