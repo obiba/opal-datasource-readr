@@ -41,7 +41,7 @@ public class DataWriteROperation extends AbstractROperation {
   }
 
   private String getCommand() {
-    return String.format("write_delim(%s, \"%s\", delim = \"%s\"%s)", symbol, destination, delimiter.replace("\"", "\\\""), missingValues());
+    return String.format("write_delim(`%s`, \"%s\", delim = \"%s\"%s)", symbol, destination, delimiter.replace("\"", "\\\""), missingValues());
   }
 
   private String missingValues() {
