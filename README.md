@@ -1,6 +1,6 @@
 # Opal ReadR Plugin [![Build Status](https://travis-ci.com/obiba/opal-datasource-readr.svg?branch=master)](https://travis-ci.com/obiba/opal-datasource-readr)
 
-This plugin allows to import data from delimited formats (CSV, TSV etc.) and more generally from "rectangular text data", using the R package [readr](https://cran.r-project.org/package=readr). 
+This plugin allows to import/export data from/to delimited formats (CSV, TSV etc.) and more generally from "rectangular text data", using the R package [readr](https://cran.r-project.org/package=readr). 
 
 [Opal](https://github.com/obiba/opal) is OBiBa’s core database application for biobanks or epidemiological studies.
 
@@ -24,5 +24,3 @@ OBiBa software are open source and made available under the [GPL3 licence](http:
 If you are using OBiBa software, please cite our work in your code, websites, publications or reports.
 
 "The work presented herein was made possible using the OBiBa suite (www.obiba.org), a  software suite developed by Maelstrom Research (www.maelstrom-research.org)"
-
-Implementation of an Opal ReadR datasource plugin
