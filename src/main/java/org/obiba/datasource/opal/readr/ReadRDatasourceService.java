@@ -1,22 +1,12 @@
 package org.obiba.datasource.opal.readr;
 
-import java.io.File;
-import java.nio.file.Paths;
-
-import javax.validation.constraints.NotNull;
-
-import com.google.common.base.Strings;
-
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
 import org.json.JSONObject;
 import org.obiba.magma.Datasource;
 import org.obiba.magma.DatasourceFactory;
 import org.obiba.magma.ValueTable;
-import org.obiba.magma.ValueTableWriter;
 import org.obiba.magma.support.StaticDatasource;
 import org.obiba.opal.spi.datasource.DatasourceUsage;
-import org.obiba.opal.spi.r.FileReadROperation;
+import org.obiba.opal.spi.r.FolderReadROperation;
 import org.obiba.opal.spi.r.RUtils;
 import org.obiba.opal.spi.r.datasource.AbstractRDatasourceFactory;
 import org.obiba.opal.spi.r.datasource.AbstractRDatasourceService;
@@ -25,6 +15,9 @@ import org.obiba.opal.spi.r.datasource.magma.RDatasource;
 import org.obiba.opal.spi.r.datasource.magma.RSymbolWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.validation.constraints.NotNull;
+import java.io.File;
 
 public class ReadRDatasourceService extends AbstractRDatasourceService {
 
@@ -89,7 +82,7 @@ public class ReadRDatasourceService extends AbstractRDatasourceService {
 
           @Override
           public void write(ValueTable table) {
-            File file = getOutputFile();
+            File outputFolder = getOutputFile();
 
             String delimiter = parameters.optString("delim");
             String missingValuesCharacters = parameters.optString("na", "\"\", \"NA\"");
@@ -99,7 +92,7 @@ public class ReadRDatasourceService extends AbstractRDatasourceService {
 
             execute(new DataWriteROperation(symbol, resultFile, delimiter, missingValuesCharacters));
             // copy file from R session
-            execute(new FileReadROperation(resultFile, Paths.get(file.getAbsolutePath(), resultFile).toFile()));
+            execute(new FolderReadROperation(outputFolder));
           }
 
           @Override
