@@ -3,7 +3,7 @@
   <groupId>org.obiba.datasource</groupId>
   <artifactId>opal-datasource-readr</artifactId>
   <packaging>jar</packaging>
-  <version>1.1-SNAPSHOT</version>
+  <version>1.2-SNAPSHOT</version>
   <name>opal-datasource-readr</name>
   <url>http://obiba.org</url>
 
@@ -255,7 +255,7 @@
     <connection>scm:git:https://github.com/obiba/opal-datasource-readr.git</connection>
     <developerConnection>scm:git:https://github.com/obiba/opal-datasource-readr.git</developerConnection>
     <url>https://github.com/obiba/opal-datasource-readr</url>
-    <tag>opal-datasource-readr-1.1.x</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <issueManagement>
