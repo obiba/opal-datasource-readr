@@ -60,7 +60,7 @@ public class DataReadROperation extends AbstractROperation {
   }
 
   private String readWithTable() {
-    return String.format("read_table2(\"%s\"%s%s%s)", source, missingValues(), numberOfRecordsToSkipValue(), localeValue());
+    return String.format("read_table(\"%s\"%s%s%s)", source, missingValues(), numberOfRecordsToSkipValue(), localeValue());
   }
 
   private String quote() {

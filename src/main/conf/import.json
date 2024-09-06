@@ -7,7 +7,10 @@
       "type": "string",
       "title": "Data File",
       "format": "file",
-      "description": "Data in CSV, TSV etc. format supported by readr."
+      "description": "Data in CSV, TSV etc. format supported by readr.",
+      "fileFormats": [
+        ".csv", ".tsv", ".zip", ".gz"
+      ]
     },
     {
       "key": "delim",
